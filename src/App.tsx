@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import UnitDropdown from "./Components/UnitDropdown";
+import UnitDropdownOptions from "./Components/UnitDropdown";
 
 function App() {
   const [input, setInput] = useState("10");
@@ -15,17 +15,27 @@ function App() {
     // this is to check if this conversion was succesful
     let succesful = true;
 
+    console.log(selectedInput + "," + selectedOutput);
+
     if (result < 0) succesful = false;
 
     switch (selectedInput) {
       case "cm":
         if (selectedOutput == "m") result /= 1000;
+        else if (selectedOutput == "km") result /= 1000 * 1000;
         // if all these checks fail we just make the output empty
         else succesful = false;
         break;
 
       case "m":
         if (selectedOutput == "cm") result *= 1000;
+        else if (selectedOutput == "km") result /= 1000;
+        else succesful = false;
+        break;
+
+      case "km":
+        if (selectedOutput == "cm") result *= 1000 * 1000;
+        else if (selectedOutput == "m") result *= 1000;
         else succesful = false;
         break;
 
@@ -78,32 +88,23 @@ function App() {
   return (
     <>
       <body>
+        <h2>From</h2>
         <div className="Input">
           <input
             type="number"
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && convert()}
           />
           <select value={selectedInput} onChange={handleInputDropdown}>
-            <option value="cm">cm</option>
-            <option value="m">m</option>
-            <option value="g">g</option>
-            <option value="kg">kg</option>
-            <option value="ml">ml</option>
-            <option value="l">l</option>
-            <option value="m3">m3</option>
+            <UnitDropdownOptions />
           </select>
         </div>
+        <h2>To</h2>
         <div className="Output">
-          <p>{output}</p>
+          <input value={output} type="number " disabled />
           <select value={selectedOutput} onChange={handleOutputDropdown}>
-            <option value="cm">cm</option>
-            <option value="m">m</option>
-            <option value="g">g</option>
-            <option value="kg">kg</option>
-            <option value="ml">ml</option>
-            <option value="l">l</option>
-            <option value="m3">m3</option>
+            <UnitDropdownOptions />
           </select>
         </div>
         <button onClick={convert}>Convert</button>
