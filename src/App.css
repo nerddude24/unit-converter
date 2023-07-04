@@ -64,9 +64,11 @@ input[type="number"] {
 button {
   width: 45vh;
   height: 5vh;
+  cursor: pointer;
 }
 
 select {
   height: 5vh;
   margin-left: 2vh;
+  cursor: pointer;
 }
